@@ -4,11 +4,22 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
 
+//require routers
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
+var actions = require('./routes/api/actions');
+var devices = require('./routes/api/devices');
+var deviceClasses = require('./routes/api/deviceClasses');
+var deviceTypes = require('./routes/api/deviceTypes');
+var rooms = require('./routes/api/rooms');
+var shServices = require('./routes/api/shServices');
+var triggers = require('./routes/api/triggers');
+
 var app = express();
+var api = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -22,8 +33,21 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//mongodb connect
+mongoose.connect('mongodb://localhost:27017/SHServiceDB');
+
+//routers
 app.use('/', routes);
 app.use('/users', users);
+
+app.use('/api', api);
+api.use('/actions', actions);
+api.use('/devices', devices);
+api.use('/deviceClasses', deviceClasses);
+api.use('/deviceTypes', deviceTypes);
+api.use('/rooms', rooms);
+api.use('/shServices', shServices);
+api.use('/triggers', triggers);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
