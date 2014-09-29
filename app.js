@@ -36,6 +36,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 //mongodb connect
 mongoose.connect('mongodb://localhost:27017/SHServiceDB');
 
+//CORS
+api.all('*', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type");
+
+  if ('OPTIONS' == req.method) return res.sendStatus(200);
+  next();
+});
+
 //routers
 app.use('/', routes);
 app.use('/users', users);

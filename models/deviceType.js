@@ -8,10 +8,20 @@ var deviceTypeSchema = new Schema({
 	symbol: String,
 	minValue: Number,
 	maxValue: Number,
-	deviceClass: {
-		type: ObjectId,
+	class: {
+		type: Schema.ObjectId,
 		ref: 'deviceClasses'
 	}
 });
+
+deviceTypeSchema.statics = {
+	getFromBody: function(deviceType){
+		if(typeof(deviceType.class) === "object"){
+			deviceType.class = deviceType.class._id;
+		}
+
+		return deviceType;
+	}
+}
 
 module.exports = mongoose.model('deviceTypes', deviceTypeSchema);

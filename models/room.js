@@ -3,8 +3,8 @@ var Schema = mongoose.Schema;
 
 var roomSchema = new Schema({
 	name: String,
-	home: {
-		type: ObjectId,
+	shService: {
+		type: Schema.ObjectId,
 		ref: 'shServices'
 	}
 });

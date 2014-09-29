@@ -1,6 +1,6 @@
 var express = require('express');
 var mongoose = require('mongoose');
-var Action = require('../models/action');
+var Action = require('../../models/action');
 
 var router = express.Router();
 
@@ -32,19 +32,19 @@ router.get('/:id', function(req, res){
 router.post('/', function(req, res){
 	var action = new Action(req.body);
 
-	action.save(function(err, newAction){
+	action.save(function(err, action){
 		if(err){
 			console.log(err);
 			res.sendStatus(500);
 		}
 
-		res.send(newAction);
+		res.send(action);
 	});
 });
 
 // PUT action/
 router.put('/', function(req, res){
-	Action.FindByIdAndUpdate(req.body.id, req.body).exec(function(err){
+	Action.findByIdAndUpdate(req.body._id, req.body).exec(function(err){
 		if(err){
 			console.log(err);
 			res.sendStatus(500);
@@ -56,7 +56,7 @@ router.put('/', function(req, res){
 
 // DELETE action/5
 router.delete('/:id', function(req, res){
-	Action.FindByIdAndRemove(req.params.id).exec(function(err){
+	Action.findByIdAndRemove(req.params.id).exec(function(err){
 		if(err){
 			console.log(err);
 			res.sendStatus(500);

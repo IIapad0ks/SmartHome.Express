@@ -1,6 +1,8 @@
 var express = require('express');
 var mongoose = require('mongoose');
-var Trigger = require('../models/trigger');
+var _ = require('underscore');
+
+var Trigger = require('../../models/trigger');
 
 var router = express.Router();
 
@@ -12,7 +14,14 @@ router.get('/', function(req, res) {
 			res.sendStatus(500);
 		}
 
-		res.send(triggers);
+		Trigger.getPopulated(triggers, function(err, triggers){
+			if(err){
+				console.log(err);
+				res.sendStatus(500);
+			}
+
+			res.send(triggers);
+		});
 	});
 });
 
@@ -24,27 +33,42 @@ router.get('/:id', function(req, res){
 			res.sendStatus(500);
 		}
 
-		res.send(trigger);
+		trigger.getPopulated(function(err, trigger){
+			if(err){
+				console.log(err);
+				res.sendStatus(500);
+			}
+
+			res.send(trigger);
+		});
 	});
 });
 
 // POST /trigger
 router.post('/', function(req, res){
-	var trigger = new Trigger(req.body);
+	var trigger = new Trigger(Trigger.getFromBody(req.body));
 
-	trigger.save(function(err, newTrigger){
+	trigger.save(function(err, trigger){
 		if(err){
 			console.log(err);
 			res.sendStatus(500);
 		}
 
-		res.send(newTrigger);
+		trigger.getPopulated(function(err, trigger){
+			if(err){
+				console.log(err);
+				res.sendStatus(500);
+			}
+
+			res.send(trigger);	
+		});
 	});
 });
 
 // PUT trigger/
 router.put('/', function(req, res){
-	Trigger.FindByIdAndUpdate(req.body.id, req.body).exec(function(err){
+	var trigger = Trigger.getFromBody(req.body);
+	Trigger.findByIdAndUpdate(trigger._id, trigger).exec(function(err){
 		if(err){
 			console.log(err);
 			res.sendStatus(500);
@@ -56,7 +80,7 @@ router.put('/', function(req, res){
 
 // DELETE trigger/5
 router.delete('/:id', function(req, res){
-	Trigger.FindByIdAndRemove(req.params.id).exec(function(err){
+	Trigger.findByIdAndRemove(req.params.id).exec(function(err){
 		if(err){
 			console.log(err);
 			res.sendStatus(500);

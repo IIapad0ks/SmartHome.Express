@@ -1,6 +1,6 @@
 var express = require('express');
 var mongoose = require('mongoose');
-var SHService = require('../models/shService');
+var SHService = require('../../models/shService');
 
 var router = express.Router();
 
@@ -44,7 +44,7 @@ router.post('/', function(req, res){
 
 // PUT shService/
 router.put('/', function(req, res){
-	SHService.FindByIdAndUpdate(req.body.id, req.body).exec(function(err){
+	SHService.findByIdAndUpdate(req.body._id, req.body).exec(function(err){
 		if(err){
 			console.log(err);
 			res.sendStatus(500);
@@ -56,7 +56,7 @@ router.put('/', function(req, res){
 
 // DELETE shService/5
 router.delete('/:id', function(req, res){
-	SHService.FindByIdAndRemove(req.params.id).exec(function(err){
+	SHService.findByIdAndRemove(req.params.id).exec(function(err){
 		if(err){
 			console.log(err);
 			res.sendStatus(500);

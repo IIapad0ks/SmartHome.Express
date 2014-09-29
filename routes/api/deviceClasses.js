@@ -1,6 +1,6 @@
 var express = require('express');
 var mongoose = require('mongoose');
-var DeviceClass = require('../models/deviceClass');
+var DeviceClass = require('../../models/deviceClass');
 
 var router = express.Router();
 
@@ -32,19 +32,19 @@ router.get('/:id', function(req, res){
 router.post('/', function(req, res){
 	var deviceClass = new DeviceClass(req.body);
 
-	deviceClass.save(function(err, newDeviceClass){
+	deviceClass.save(function(err, deviceClass){
 		if(err){
 			console.log(err);
 			res.sendStatus(500);
 		}
 
-		res.send(newDeviceClass);
+		res.send(deviceClass);
 	});
 });
 
 // PUT deviceClass/
 router.put('/', function(req, res){
-	DeviceClass.FindByIdAndUpdate(req.body.id, req.body).exec(function(err){
+	DeviceClass.findByIdAndUpdate(req.body._id, req.body).exec(function(err){
 		if(err){
 			console.log(err);
 			res.sendStatus(500);
@@ -56,7 +56,7 @@ router.put('/', function(req, res){
 
 // DELETE deviceClass/5
 router.delete('/:id', function(req, res){
-	DeviceClass.FindByIdAndRemove(req.params.id).exec(function(err){
+	DeviceClass.findByIdAndRemove(req.params.id).exec(function(err){
 		if(err){
 			console.log(err);
 			res.sendStatus(500);
